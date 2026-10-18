@@ -1140,7 +1140,10 @@
     float hash(vec2 p){ return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453); }
     float rainStreak(vec2 uv, float t, float seed){
       float aspect = uResolution.x/max(1.0,uResolution.y);
-      vec2 p = vec2(uv.x*aspect*58.0 + uv.y*17.0 + t*1.2, uv.y*19.0 - t*14.0);
+      // Work in a screen-down coordinate so the streaks visibly travel downward
+      // and lean in the direction of the wind.
+      float screenDown = 1.0 - uv.y;
+      vec2 p = vec2(uv.x*aspect*58.0 - screenDown*10.0, screenDown*19.0 - t*14.0);
       vec2 id = floor(p + seed*19.0);
       vec2 f = fract(p + seed*19.0);
       float h = hash(id);
